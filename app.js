@@ -8,15 +8,15 @@ const rl = readline.createInterface({
 let playerOneTurn = true;
 
 const board = {
-  '1': null,
-  '2': null,
-  '3': null,
-  '4': null,
-  '5': null,
-  '6': null,
-  '7': null,
-  '8': null,
-  '9': null
+  '1': ' ',
+  '2': ' ',
+  '3': ' ',
+  '4': ' ',
+  '5': ' ',
+  '6': ' ',
+  '7': ' ',
+  '8': ' ',
+  '9': ' ' 
 };
 
 console.log(`
@@ -27,10 +27,35 @@ console.log(`
       7 | 8 | 9
 `);
 
-rl.question('Which space? ', space => {
+const startGame = () => {
+  playerTurn(playerOneTurn);
+};
 
-});
+const playerTurn = async (playerOne) => {
+  if (playerOne) {
+    rl.question('Player 1 which space? ', space => {
+      board[space] = 'x';
+      generateBoard();
+    });
+  } else {
+    rl.question('Player 2 which space? ', space => {
+      board[space] = 'o';
+      generateBoard();
+    });
+  }
+}
 
 const generateBoard = () => {
+  console.log(`
+    ${board[1]} | ${board[2]} | ${board[3]}
+   -----------
+    ${board[4]} | ${board[5]} | ${board[6]}
+   -----------
+    ${board[7]} | ${board[8]} | ${board[9]}
+  `);
+  
+  playerOneTurn = !playerOneTurn;
+  startGame();
+};
 
-}
+startGame();
