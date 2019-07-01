@@ -42,33 +42,42 @@ const startGame = () => {
 
 const replay = () => {
   rl.question('Play again? Y/N ', answer => {
-    if (answer === 'Y') {
-      console.log('TEST');
-    }
+    if (answer === 'Y' || answer === 'y') startGame();
+    else rl.close();
   });
 }
 
 const playerTurn = () => {
   if (playerOneTurn) {
     rl.question('Player 1 which space? ', space => {
-      board[space] = 'x';
-      generateBoard();
+      if (board[space] !== ' ') {
+        console.log('Space is taken, try again!');
+        playerTurn()
+      } else {
+        board[space] = 'x';
+        generateBoard();
+      }
     });
   } else {
     rl.question('Player 2 which space? ', space => {
-      board[space] = 'o';
-      generateBoard();
+      if (board[space] !== ' ') {
+        console.log('Space is taken, try again!');
+        playerTurn()
+      } else {
+        board[space] = 'o';
+        generateBoard();
+      }
     });
   }
 }
 
 const generateBoard = () => {
   console.log(`
-    ${board[1]} | ${board[2]} | ${board[3]}
-   -----------
-    ${board[4]} | ${board[5]} | ${board[6]}
-   -----------
-    ${board[7]} | ${board[8]} | ${board[9]}
+    ${board[1]} | ${board[2]} | ${board[3]}        1 | 2 | 3
+   -----------     -------------
+    ${board[4]} | ${board[5]} | ${board[6]}        4 | 5 | 6
+   -----------     -------------
+    ${board[7]} | ${board[8]} | ${board[9]}        7 | 8 | 9
   `);
   
   const xWin = checkVictory('x');
@@ -96,7 +105,6 @@ const checkVictory = (player) => {
 };
 
 const victoryMessage = (player) => {
-  rl.close();
   console.log(`Player ${player === 'x' ? 1 : 2} has won the game!`);
   return true;
 };
