@@ -28,11 +28,28 @@ console.log(`
 `);
 
 const startGame = () => {
-  playerTurn(playerOneTurn);
+  board[1] = ' ';
+  board[2] = ' ';
+  board[3] = ' ';
+  board[4] = ' ';
+  board[5] = ' ';
+  board[6] = ' ';
+  board[7] = ' ';
+  board[8] = ' ';
+  board[9] = ' ';
+  playerTurn();
 };
 
-const playerTurn = async (playerOne) => {
-  if (playerOne) {
+const replay = () => {
+  rl.question('Play again? Y/N ', answer => {
+    if (answer === 'Y') {
+      console.log('TEST');
+    }
+  });
+}
+
+const playerTurn = () => {
+  if (playerOneTurn) {
     rl.question('Player 1 which space? ', space => {
       board[space] = 'x';
       generateBoard();
@@ -54,8 +71,34 @@ const generateBoard = () => {
     ${board[7]} | ${board[8]} | ${board[9]}
   `);
   
-  playerOneTurn = !playerOneTurn;
-  startGame();
+  const xWin = checkVictory('x');
+  const yWin = checkVictory('o');
+
+  if (!xWin && !yWin) {
+    playerOneTurn = !playerOneTurn;
+    playerTurn();
+  } else {
+    replay();
+  }
+};
+
+const checkVictory = (player) => {
+  if (
+    board[1] === player && board[2] === player && board[3] === player
+    || board[4] === player && board[5] === player && board[6] === player
+    || board[7] === player && board[8] === player && board[9] === player
+    || board[1] === player && board[4] === player && board[7] === player
+    || board[2] === player && board[5] === player && board[8] === player
+    || board[3] === player && board[6] === player && board[9] === player
+    || board[1] === player && board[5] === player && board[9] === player
+    || board[3] === player && board[5] === player && board[7] === player
+    ) return victoryMessage(player);
+};
+
+const victoryMessage = (player) => {
+  rl.close();
+  console.log(`Player ${player === 'x' ? 1 : 2} has won the game!`);
+  return true;
 };
 
 startGame();
